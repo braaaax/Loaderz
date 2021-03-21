@@ -125,7 +125,7 @@ ZwX:
    41 58                       pop     r8             ; r9 = arg4
    4C 8B 4C 24 20              mov     r9, [rsp + 0x20]
    0F 05                       syscall
-   FF 64 24 18                 jmp     qword[rsp + 0x0]
+   FF 64 24 18                 jmp     qword[rsp]
 */
 
 //
@@ -143,7 +143,7 @@ BOOL GetSSN(PSYSCALL_LIST List, DWORD Hash, PDWORD Ssn) {
 }
 
 /*
-fnAddr GetSyscallPtr(char* syscall_name, ...){
+fnAddr eSyscall(char* syscall_name, ...){
     SYSCALL_LIST   List;
     DWORD          SsnId, allocatevirtualmemory_hash, protectvirtualmemory_hash, oldProtect = 0;
     LPVOID         baseaddr;
@@ -185,9 +185,5 @@ fnAddr GetSyscallPtr(char* syscall_name, ...){
     va_start(ap)
     return (fnAddr)baseaddr; 
 }
-
-// encrypted wrapper idea
-void test_func()
-
 
 */
