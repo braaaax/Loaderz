@@ -38,7 +38,7 @@
 
 //
 // Interface - void func pointer type
-//
+// taken from some forrestorr code
 typedef void(*fnAddr)();
 
 //
@@ -131,14 +131,6 @@ typedef struct _PEB_LDR_DATA
 
 } PEB_LDR_DATA, * PPEB_LDR_DATA;
 
-/*
-typedef struct _MS_PEB_LDR_DATA {
-	BYTE Reserved1[8];
-	PVOID Reserved2[3];
-	LIST_ENTRY InMemoryOrderModuleList;
-} MS_PEB_LDR_DATA, *PMS_PEB_LDR_DATA;
-*/
-
 //here we don't want to use any functions imported form extenal modules
 
 typedef struct _LDR_DATA_TABLE_ENTRY {
@@ -158,15 +150,6 @@ typedef struct _LDR_DATA_TABLE_ENTRY {
     ULONG   TimeDateStamp;
 } LDR_DATA_TABLE_ENTRY, * PLDR_DATA_TABLE_ENTRY;
 
-/*
-typedef struct _MS_LDR_DATA_TABLE_ENTRY {
-	PVOID Reserved1[2];//8 * 2
-	LIST_ENTRY InMemoryOrderLinks; // 2
-	PVOID Reserved2[2]; // 8 * 2
-	PVOID DllBase;
-} MS_LDR_DATA_TABLE_ENTRY, *PMS_LDR_DATA_TABLE_ENTRY;
-
-*/
 
 typedef struct _RTL_DRIVE_LETTER_CURDIR {
   USHORT                  Flags;
@@ -225,8 +208,6 @@ typedef struct _PEB
 
 #endif //__NTDLL_H__
 
-
-
 typedef struct _PROCESS_BASIC_INFORMATION {
     PVOID Reserved1;
     PPEB PebBaseAddress;
@@ -254,7 +235,6 @@ typedef struct _OBJECT_ATTRIBUTES
 } OBJECT_ATTRIBUTES, * POBJECT_ATTRIBUTES;
 
 
-
 typedef struct tagPROCENTRY32 {
   DWORD     dwSize;
   DWORD     cntUsage;
@@ -268,81 +248,6 @@ typedef struct tagPROCENTRY32 {
   CHAR      szExeFile[MAX_PATH];
 } PROCENTRY32;
 
-/*
-typedef NTSTATUS(NTAPI* pNtCreateSection)(
-    HANDLE SectionHande, 
-    ULONG DesiredAccess, 
-    POBJECT_ATTRIBUTES ObjectAttributes, 
-    PLARGE_INTEGER MaximumSize, 
-    ULONG PageAttributes, 
-    ULONG SectionAttributes, 
-    HANDLE FileHandle
-    );
-
-typedef NTSTATUS(NTAPI* pNtCreateThreadEx)(
-    PHANDLE ThreadHandle, 
-    ACCESS_MASK DesiredAccess, 
-    POBJECT_ATTRIBUTES ObjectAttributes, 
-    HANDLE ProcessHandle, 
-    PVOID StartRoutine,  
-    PVOID Argument, 
-    ULONG CreateFlags, 
-    SIZE_T ZeroBits, 
-    SIZE_T StackSize, 
-    SIZE_T MaximumStackSize, 
-    PPS_ATTRIBUTE_LIST  AttributeList
-    );
-
-typedef NTSTATUS(NTAPI* pNtMapViewOfSection)(
-    HANDLE SectionHandle, 
-    HANDLE ProcessHandle, 
-    PVOID *BaseAddress OPTIONAL, 
-    ULONG ZeroBits OPTIONAL, 
-    ULONG CommitSize, 
-    PLARGE_INTEGER SectionOffset OPTIONAL, 
-    SIZE_T ViewSize, 
-    SECTION_INHERIT InheritDisposition, 
-    ULONG AllocationType OPTIONAL, 
-    ULONG Protect
-    );
-
-typedef NTSTATUS(NTAPI* pNtOpenProcess)(
-    PHANDLE ProcessHandle, 
-    ACCESS_MASK DesiredAccess, 
-    POBJECT_ATTRIBUTES ObjectAttributes, 
-    PCLIENT_ID ClientId
-    );
-
-typedef NTSTATUS(NTAPI* pNtQueryInformationProcess)(
-    HANDLE ProcessHandle, 
-    PROC_INFORMATION_CLASS ProcessInformationClass, 
-    PVOID ProcessInformation, 
-    ULONG ProcessInformationLength, 
-    PULONG ReturnLenth
-    );
-
-typedef NTSTATUS(NTAPI* pNtCreateTransaction)(
-    _Out_ PHANDLE TransactionHandle, 
-    _In_ ACCESS_MASK DesiredAccess, 
-    _In_opt_ POBJECT_ATTRIBUTES ObjectAttributes, 
-    _In_opt_ LPGUID Uow, 
-    _In_opt_ HANDLE TmHandle, 
-    _In_opt_ ULONG CreateOptions, 
-    _In_opt_ ULONG IsolationLevel, 
-    _In_opt_ ULONG IsolationFlags, 
-    _In_opt_ PLARGE_INTEGER Timeout, 
-    _In_opt_ PUNICODE_STRING Description
-    );
-
-typedef NTSTATUS(NTAPI* pNtAllocateVirtualMemory)(
-    HANDLE ProcessHandle, 
-    PVOID* BaseAddress, 
-    ULONG_PTR ZeroBits, 
-    PULONG RegionSize, 
-    ULONG AllocationType, 
-    ULONG Protect
-    );
-*/
 
 typedef HANDLE (WINAPI* pGetCurrentProcess)(void);
 
@@ -408,27 +313,6 @@ typedef struct _MS_LDR_DATA_TABLE_ENTRY {
 	PVOID DllBase;
 } MS_LDR_DATA_TABLE_ENTRY, *PMS_LDR_DATA_TABLE_ENTRY;
 
-/*
-typedef NTSTATUS(__stdcall* InvokeSsn_t)(
-    DWORD,  // Sysid
-    HANDLE, // handle to current process
-    PVOID,  // func_ptr
-    PVOID,  // arg #1
-    PVOID,  // arg #2
-    PVOID,  // arg #3
-    PVOID   // arg #4
-    );
-
-NTSTATUS InvokeSsn_amd64(
-    DWORD,  // Sysid
-    HANDLE, // handle to current process <-target func params
-    PVOID,  // func_ptr
-    PVOID,  // arg #1
-    PVOID,  // arg #2
-    PVOID,  // arg #3
-    PVOID   // arg #4
-    );
-*/
 
 EXTERN_C void GetSyscallList(PSYSCALL_LIST List);
 EXTERN_C BOOL GetSSN(PSYSCALL_LIST, DWORD, PDWORD);

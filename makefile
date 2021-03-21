@@ -15,14 +15,14 @@ SECTION_INJECTOR_DLL_SOURCE=section.c
 SECTION_INJECTOR_DLL_OUT=section_inject.dll
 
 SECTION_LOADER_SOURCE=section_loader.c
-SECTION_LOADER_OUT=section_loader.exe
+SECTION_LOADER_OUT=section_runner.exe
 SECTION_LOADER_DLL_SOURCE=section_loader_DLL.c
-SECTION_LOADER_DLL_OUT=section_loader.dll
+SECTION_LOADER_DLL_OUT=section_runner.dll
 
 RUNNER_SOURCE=run_shellcode.c
 RUNNER_DLL_SOURCE=run_shellcode_DLL.c
-RUNNER_OUT=run_shellcode.exe
-RUNNER_DLL_OUT=run_shellcode.dll
+RUNNER_OUT=runner.exe
+RUNNER_DLL_OUT=runner.dll
 
 HELPER_SOURCE=helper.c sfh.c aes.c
 HELPER_WINDOWS_OUT=helper-win_x64.exe
@@ -33,7 +33,7 @@ S_FLAGS=-s -R .comment -R .debug -R .gnu.version --strip-unneeded
 DEBUG_FLAGS=-O0 -g -v
 
 
-all: section_inject section_load section_load_dll runner runner_dll helper_linux
+all: section_inject section_runner section_runner_dll runner runner_dll
 
 
 section_inject:
@@ -41,12 +41,12 @@ section_inject:
 		$(CC) $(SECTION_INJECTOR_DLL_SOURCE) $(COMMON_SOURCE) -o $(SECTION_INJECTOR_DLL_OUT) $(LINK) $(DLL_FLAGS)
 		$(S) $(S_FLAGS) $(SECTION_INJECTOR_DLL_OUT)
 
-section_load:
+section_runner:
 		$(ASM_CC) $(ASM_SOURCE) -o $(LIB_OUT)
 		$(CC) $(SECTION_LOADER_SOURCE) $(COMMON_SOURCE) -o $(SECTION_LOADER_OUT) $(LINK) $(EXE_FLAGS)
 		$(S) $(S_FLAGS) $(SECTION_LOADER_OUT)
 
-section_load_dll:
+section_runner_dll:
 		$(ASM_CC) $(ASM_SOURCE) -o $(LIB_OUT)
 		$(CC) $(SECTION_LOADER_DLL_SOURCE) $(COMMON_SOURCE) -o $(SECTION_LOADER_DLL_OUT) $(LINK) $(DLL_FLAGS)
 

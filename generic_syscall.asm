@@ -1,4 +1,4 @@
-; www.mdsec.co.uk/2020/12/bypassing-user-mode-hooks-and-direct-invocation-of-system-calls-for-red-teams
+; filled in the gaps from www.mdsec.co.uk/2020/12/bypassing-user-mode-hooks-and-direct-invocation-of-system-calls-for-red-teams
 ; nasm -f win64 generic_syscall.asm -o generic_syscall.lib
 section .text
 global ZwX
@@ -19,4 +19,4 @@ ZwX:
                            ; r9 = arg4
     mov     r9, [rsp + 0x20] 
     syscall
-    jmp     qword[rsp+0x0]
+    jmp     qword[rsp]
