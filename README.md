@@ -46,6 +46,7 @@ use
 `pip install pycryptodome`  
 `msfvenom -p windows/x64/exec CMD='C:\Windows\System32\notepad.exe' EXITFUNC=process -f raw -o test.bin`  
 `python build.py -inbin test.bin -execmethod runner`  
+`python builder.py -inbin test.bin -execmethod section_inject --process notepad.exe --cmdline 'c:\\\\windows\\system32\\firefox.exe'`
 
 
 ```
@@ -62,11 +63,13 @@ optional arguments:
   --v V                 print config
   ```  
 
+## note 
+the loader is not for heavylifting as everything is put on the stack
 
 ### References & Reading
 Generally:
-hasherezade 
-forrestorr
+hasherezade  
+forrestorr  
 batsec  
-https://www.mdsec.co.uk/2020/12/bypassing-user-mode-hooks-and-direct-invocation-of-system-calls-for-red-teams
+https://www.mdsec.co.uk/2020/12/bypassing-user-mode-hooks-and-direct-invocation-of-system-calls-for-red-teams  
 https://github.com/simon-whitehead/assembly-fun/blob/master/windows-x64/README.md  
