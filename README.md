@@ -59,17 +59,15 @@ optional arguments:
   -inbin INBIN          .bin file
   -execmethod {section_inject,section_runner,section_runner_dll,runner,runner_dll}
   --process PROCESS     process to inject (only with 'section_inject')
-  --cmdline CMDLINE     cmdline argument to show
-  --v V                 print config
+  --cmdline CMDLINE     cmdline argument to show (only with 'section_inject')
+  --verbose             
   ```  
 
-## note 
-the loader is not for heavylifting as everything is put on the stack
 
 ### References & Reading
-Generally:
-hasherezade  
-forrestorr  
-batsec  
+Generally:  
+hasherezade -- rely heavilly on her PEB lookup heeader code
+forrest-orr -- excellent code to read and learn from  
+batsec -- lots of python building stuff from his shad0w project
 https://www.mdsec.co.uk/2020/12/bypassing-user-mode-hooks-and-direct-invocation-of-system-calls-for-red-teams  
 https://github.com/simon-whitehead/assembly-fun/blob/master/windows-x64/README.md  
