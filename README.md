@@ -21,15 +21,18 @@ ZwX:
 ```
 This is an interesting technique because it removes the need to both define native function types in our header files and to define each native function in assembly.  
 Some prerequisite knowledge:  
-When a function is called the return address is pushed to the stack and execution jumps to the address of the function. So `call` is really like a `push ret` then `jmp faddr` instruction. 
-In x64 the fastcall calling convention is used. With fastcall four registers are used to hold the first four parameters of a function (`rcx`, `rdx`, `r8`, `r9`).
+- When a function is called the return address is pushed to the stack and execution jumps to the address of the function. So `call` is really like a `push ret` then `jmp faddr` instruction.  
+- In x64 the fastcall calling convention is used. With fastcall four registers are used to hold the first four parameters of a function (`rcx`, `rdx`, `r8`, `r9`).  
 
-So `pop rax` moves the return address from the top of the stack to `rax`.  
+So `pop rax` moves the return address from the top of the stack to `rax` register. Now `first parameter` of the function is at the top.  
 `pop r10` moves the next item from the top of the stack to `r10`.
 The return address in `rax` is moved back to the top of the stack with the `push rax` operation.
-The first parameter of our ZwX fucntion is then pushed onto the stack with `push rcx`. 
+The first parameter of our ZwX fucntion is then pushed onto the stack with `push rcx`.  
+The stack then starts to look more like the stdcall the underlying native function is expecting.  
 
-Additionally shellcode is encrypted with AES-CBC encryption via the kokke TinyAES library.  
+
+## Encoding  
+The shellcode is encrypted with AES-CBC encryption via the kokke TinyAES library.  
 The IV and key are generated with the get_random_bytes function in the pycryptodome library.  
 The shellcode payload is decrypted with a crude brute-force loop of the last two bytes of the key instead of using the sleep function.  
 ```c 
@@ -71,7 +74,6 @@ optional arguments:
   --cmdline CMDLINE     cmdline argument to show (only with 'section_inject')
   --verbose             
   ```  
-
 
 ### References & Reading
 Generally:  
