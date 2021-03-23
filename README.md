@@ -64,14 +64,14 @@ python builder.py -inbin test.bin -execmethod section_inject --process notepad.e
 
 
 ```bash
-usage: builder.py [-h] [-inbin INBIN] [-execmethod {section_inject,section_runner,section_runner_dll,runner,runner_dll}] [--process PROCESS] [--cmdline CMDLINE] [--v V]
+usage: builder.py [-h] [-inbin INBIN] [-execmethod {section_inject,section_runner,section_runner_dll,section_runner_big,section_runner_big_dll,runner,runner_dll,runner_big_blockddls,runner_big_blockddls_dll,runner_blockdlls,runner_blockdlls_dll}] [--process PROCESS] [--cmdline CMDLINE] [--verbose]
 
-generate AES encrypted shellcode runners
+generate AES-CBC encrypted shellcode runners
 
 optional arguments:
   -h, --help            show this help message and exit
   -inbin INBIN          .bin file
-  -execmethod {section_inject,section_runner,section_runner_dll,runner,runner_dll}
+  -execmethod {section_inject,section_runner,section_runner_dll,section_runner_big,section_runner_big_dll,runner,runner_dll,runner_big_blockddls,runner_big_blockddls_dll,runner_blockdlls,runner_blockdlls_dll}
   --process PROCESS     process to inject (only with 'section_inject')
   --cmdline CMDLINE     cmdline argument to show (only with 'section_inject')
   --verbose             
