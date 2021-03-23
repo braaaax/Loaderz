@@ -21,8 +21,12 @@ SECTION_LOADER_DLL_OUT=section_runner.dll
 
 RUNNER_SOURCE=run_shellcode.c
 RUNNER_DLL_SOURCE=run_shellcode_DLL.c
+RUNNER_BLOCKDLLS_SOURCE=runner_blockdlls.c
+RUNNER_BLOCKDLLS_DLL_SOURCE=runner_blockdlls_DLL.c
 RUNNER_OUT=runner.exe
 RUNNER_DLL_OUT=runner.dll
+RUNNER_BLOCKDLLS_OUT=runner_blockdlls.exe
+RUNNER_BLOCKDLLS_DLL_OUT=runner_blockdlls.dll
 
 HELPER_SOURCE=helper.c sfh.c aes.c
 HELPER_WINDOWS_OUT=helper-win_x64.exe
@@ -63,6 +67,20 @@ runner_dll:
 runner_debug:
 		$(ASM_CC) $(ASM_SOURCE) -o $(LIB_OUT)
 		$(CC) $(RUNNER_SOURCE) $(COMMON_SOURCE) $(LINK) -o $(RUNNER_OUT) $(DEBUG_FLAGS)
+
+runner_blockdlls:
+		$(ASM_CC) $(ASM_SOURCE) -o $(LIB_OUT)
+		$(CC) $(RUNNER_BLOCKDLLS_SOURCE) $(COMMON_SOURCE) $(LINK) -o $(RUNNER_BLOCKDLLS_OUT)
+		$(S) $(S_FLAGS) $(RUNNER_BLOCKDLLS_OUT)
+
+runner_blockdlls_dll:
+		$(ASM_CC) $(ASM_SOURCE) -o $(LIB_OUT)
+		$(CC) $(RUNNER_BLOCKDLLS_DLL_SOURCE) $(COMMON_SOURCE) $(LINK) -o $(RUNNER_BLOCKDLLS_DLL_OUT) $(DLL_FLAGS)
+		$(S) $(S_FLAGS) $(RUNNER_BLOCKDLLS_OUT)
+
+runner_blockdlls_debug:
+		$(ASM_CC) $(ASM_SOURCE) -o $(LIB_OUT)
+		$(CC) $(RUNNER_BLOCKDLLS_SOURCE) $(COMMON_SOURCE) $(LINK) -o $(RUNNER_BLOCKDLLS_OUT) $(DEBUG_FLAGS)
 
 helper_linux:
 		$(LIN_CC) $(HELPER_SOURCE) -o $(HELPER_LINUX_OUT)

