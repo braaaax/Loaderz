@@ -1,4 +1,4 @@
-CC=x86_64-w64-mingw32-gcc
+CC=x86_64-w64-mingw32-gcc -Wl,--stack,4194304
 ASM_CC=nasm -f win64
 LIN_CC=gcc
 
@@ -18,6 +18,11 @@ SECTION_LOADER_SOURCE=section_loader.c
 SECTION_LOADER_OUT=section_runner.exe
 SECTION_LOADER_DLL_SOURCE=section_loader_DLL.c
 SECTION_LOADER_DLL_OUT=section_runner.dll
+
+SECTION_LOADER_BIG_SOURCE=section_loader_big.c
+SECTION_LOADER_BIG_OUT=section_loader.exe
+SECTION_LOADER_BIG_DLL_SOURCE=section_loader_big_DLL.c
+SECTION_LOADER_BIG_DLL_OUT=section_loader.dll
 
 RUNNER_SOURCE=run_shellcode.c
 RUNNER_DLL_SOURCE=run_shellcode_DLL.c
@@ -54,6 +59,16 @@ section_runner_dll:
 		$(ASM_CC) $(ASM_SOURCE) -o $(LIB_OUT)
 		$(CC) $(SECTION_LOADER_DLL_SOURCE) $(COMMON_SOURCE) -o $(SECTION_LOADER_DLL_OUT) $(LINK) $(DLL_FLAGS)
 
+section_runner_big:
+		$(ASM_CC) $(ASM_SOURCE) -o $(LIB_OUT)
+		$(CC) $(SECTION_LOADER_SOURCE) $(COMMON_SOURCE) -o $(SECTION_LOADER_OUT) $(LINK) $(EXE_FLAGS)
+		$(S) $(S_FLAGS) $(SECTION_LOADER_OUT)
+
+section_runner_big_dll:
+		$(ASM_CC) $(ASM_SOURCE) -o $(LIB_OUT)
+		$(CC) $(SECTION_LOADER_BIG_DLL_SOURCE) $(COMMON_SOURCE) -o $(SECTION_LOADER_BIG_DLL_OUT) $(LINK) $(DLL_FLAGS)
+		$(S) $(S_FLAGS) $(SECTION_LOADER_OUT)
+
 runner:
 		$(ASM_CC) $(ASM_SOURCE) -o $(LIB_OUT)
 		$(CC) $(RUNNER_SOURCE) $(COMMON_SOURCE) $(LINK) -o $(RUNNER_OUT) $(EXE_FLAGS)
@@ -81,6 +96,16 @@ runner_blockdlls_dll:
 runner_blockdlls_debug:
 		$(ASM_CC) $(ASM_SOURCE) -o $(LIB_OUT)
 		$(CC) $(RUNNER_BLOCKDLLS_SOURCE) $(COMMON_SOURCE) $(LINK) -o $(RUNNER_BLOCKDLLS_OUT) $(DEBUG_FLAGS)
+
+runner_big:
+		$(ASM_CC) $(ASM_SOURCE) -o $(LIB_OUT)
+		$(CC) $(RUNNER_BIG_SOURCE) $(COMMON_SOURCE) $(LINK) -o $(RUNNER_OUT) $(EXE_FLAGS)
+		$(S) $(S_FLAGS) $(RUNNER_BIG_OUT)
+
+runner_big_DLL:
+		$(ASM_CC) $(ASM_SOURCE) -o $(LIB_OUT)
+		$(CC) $(RUNNER_BIG_DLL_SOURCE) $(COMMON_SOURCE) $(LINK) -o $(RUNNER_OUT) $(DLL_FLAGS)
+		$(S) $(S_FLAGS) $(RUNNER_BIG_DLL_OUT)
 
 helper_linux:
 		$(LIN_CC) $(HELPER_SOURCE) -o $(HELPER_LINUX_OUT)
