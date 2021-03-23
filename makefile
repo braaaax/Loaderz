@@ -75,5 +75,4 @@ clean:
 		-rm *.exe
 		-rm *.dll
 		-rm *.bin
-		-rm *.o
-		-rm *.obj
+		-rm *.lib
