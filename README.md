@@ -1,5 +1,20 @@
-# GENERIC SYSCALL
-This code impliments the Sorting by System Call Address method described in a [blogpost.](https://www.mdsec.co.uk/2020/12/bypassing-user-mode-hooks-and-direct-invocation-of-system-calls-for-red-teams/)<br>
+## GENERIC SYSCALL KINDA
+This code impliments the Sorting by System Call Address method described in a [blogpost.](https://www.mdsec.co.uk/2020/12/bypassing-user-mode-hooks-and-direct-invocation-of-system-calls-for-red-teams/)<br>and described below.   
+
+## SSN  
+Native system calls on windows are explained really well in lots of other places.  
+Suffice it to say that in the below function `37h` is the SSN, and it tells the kernel which function pointer to return.  
+This number is inconsistent across version and even builds. So we like to find them dynamically if possible.  
+
+```
+ZwWriteVirtualMemory
+		mov r10, rcx
+		mov eax, 37h
+		syscall
+		ret
+```
+
+The `GetSyscallsList` function populates the list of SSNs by enumerating the Zw stubs and sorting by address.  
 
 quick disasm with https://defuse.ca/online-x86-assembler.htm#disassembly
 ```
@@ -19,7 +34,8 @@ ZwX:
    0F 05                       syscall
    FF 64 24 18                 jmp     qword[rsp]
 ```
-This is an interesting technique because it removes the need to both define native function types in our header files and to define each native function in assembly.  
+This is an interesting technique because it removes the need to both define native function types in our header files and to define each native function in assembly.  Though this is not done in the blog post example, probably because it is a terrible coding practice.  
+
 Some prerequisite knowledge:  
 - When a function is called the return address is pushed to the stack and execution jumps to the address of the function. So `call` is really like a `push ret` then `jmp faddr` instruction.  
 - In x64 the fastcall calling convention is used. With fastcall four registers are used to hold the first four parameters of a function (`rcx`, `rdx`, `r8`, `r9`).  
@@ -35,6 +51,8 @@ The stack then starts to look more like the stdcall the underlying native functi
 The shellcode is encrypted with AES-CBC encryption via the kokke TinyAES library.  
 The IV and key are generated with the get_random_bytes function in the pycryptodome library.  
 The shellcode payload is decrypted with a crude brute-force loop of the last two bytes of the key instead of using the sleep function.  
+This is reduced to one-byte when the shellcode is over 1M.  
+
 ```c 
 for (int i = 0x00; i<=0xff;i++) {
     key[14] = i;
@@ -81,6 +99,7 @@ optional arguments:
 Generally:  
 hasherezade -- rely heavilly on her PEB lookup heeader code
 forrest-orr -- excellent code to read and learn from  
-batsec -- lots of python building stuff from his shad0w project
+batsec -- lots of python building stuff from his shad0w project  
+
 https://www.mdsec.co.uk/2020/12/bypassing-user-mode-hooks-and-direct-invocation-of-system-calls-for-red-teams  
 https://github.com/simon-whitehead/assembly-fun/blob/master/windows-x64/README.md  
