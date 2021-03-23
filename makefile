@@ -97,12 +97,12 @@ runner_blockdlls_debug:
 		$(ASM_CC) $(ASM_SOURCE) -o $(LIB_OUT)
 		$(CC) $(RUNNER_BLOCKDLLS_SOURCE) $(COMMON_SOURCE) $(LINK) -o $(RUNNER_BLOCKDLLS_OUT) $(DEBUG_FLAGS)
 
-runner_big:
+runner_big_blockdlls:
 		$(ASM_CC) $(ASM_SOURCE) -o $(LIB_OUT)
 		$(CC) $(RUNNER_BIG_SOURCE) $(COMMON_SOURCE) $(LINK) -o $(RUNNER_OUT) $(EXE_FLAGS)
 		$(S) $(S_FLAGS) $(RUNNER_BIG_OUT)
 
-runner_big_DLL:
+runner_big_blockdlls_dll:
 		$(ASM_CC) $(ASM_SOURCE) -o $(LIB_OUT)
 		$(CC) $(RUNNER_BIG_DLL_SOURCE) $(COMMON_SOURCE) $(LINK) -o $(RUNNER_OUT) $(DLL_FLAGS)
 		$(S) $(S_FLAGS) $(RUNNER_BIG_DLL_OUT)

