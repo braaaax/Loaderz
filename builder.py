@@ -36,7 +36,7 @@ def format_shellcode(shellcode):
 verbose = False
 parser = argparse.ArgumentParser(description="generate AES-CBC encrypted shellcode runners")
 parser.add_argument('-inbin', type=str, help=".bin file")
-parser.add_argument('-execmethod', type=str, choices=['section_inject', 'section_runner', 'section_runner_dll', 'runner', 'runner_dll'], default="runner")
+parser.add_argument('-execmethod', type=str, choices=['section_inject', 'section_runner', 'section_runner_dll', 'runner', 'runner_dll', 'runner_big'], default="runner")
 parser.add_argument('--process', type=str, help="process to inject (only with \'section_inject\')", default="notepad.exe", required=False)
 parser.add_argument('--cmdline', type=str, default="notepad", help="cmdline argument to show (only with \'section_inject\')", required=False)
 parser.add_argument('--verbose', default=False, action='store_true', dest='verbose')
@@ -52,7 +52,12 @@ sfh = CDLL(sfh_so)
 SuperFastHash = sfh.SuperFastHash
 SuperFastHash.argtypes = [c_char_p, c_uint32]
 SuperFastHash.restype = c_uint32
-with open(input_filename, "rb") as file: data = file.read()
+
+try:
+    with open(input_filename, "rb") as file: data = file.read()
+except FileNotFoundError:
+    print(f"\n\n[!] {input_filename} not found.\n")
+    exit(1)
 data_len = c_uint32(len(data))
 res = SuperFastHash(data, data_len)
 

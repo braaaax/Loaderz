@@ -21,7 +21,7 @@ WORD Runner(void){
     // bruteforce decryption key
     struct AES_ctx ctx;
     BOOL brute = TRUE;
-    unsigned char* cpbuf[ENCRYPTED_BIN_LEN];
+    unsigned char* cpbuf = malloc(ENCRYPTED_BIN_LEN * sizeof(unsigned char*));
     memcpy(cpbuf, encrypted_instructions, ENCRYPTED_BIN_LEN);
     for (int i = 0x00; i<=0xff;i++) {
         key[14] = i;
@@ -39,6 +39,7 @@ WORD Runner(void){
         }
     }
     // printf("[!] sad place\n");
+    free(cpbuf);
     return;
 
 
